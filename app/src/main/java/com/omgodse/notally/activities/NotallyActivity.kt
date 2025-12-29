@@ -9,26 +9,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
-import android.text.Spannable
-import android.text.style.BackgroundColorSpan
 import android.util.TypedValue
-import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup.LayoutParams
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.getSpans
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
@@ -108,7 +102,6 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
                 model.isFirstInstance = false
             }
 
-            setupToolbar()
             setupListeners()
             setStateFromModel()
 
@@ -554,8 +547,11 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         binding.Toolbar.setNavigationOnClickListener { finish() }
 
         val menu = binding.Toolbar.menu
-        val pin = menu.add(R.string.pin, R.drawable.pin) { item -> pin(item) }
-        bindPinned(pin)
+
+        val pin = menu.add(R.string.pin, R.drawable.pin) { model.togglePin() }
+        model.pinned.observe(this, Observer { pinned ->
+            bindPinned(pin, pinned)
+        })
 
         menu.add(R.string.share, R.drawable.share) { share() }
         menu.add(R.string.labels, R.drawable.label) { label() }
@@ -595,31 +591,31 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
             }
         }
 
-        val title = TextSize.getEditTitleSize(model.textSize)
-        val date = TextSize.getDisplayBodySize(model.textSize)
-        val body = TextSize.getEditBodySize(model.textSize)
+        val bodySize = TextSize.getDisplayBodySize(model.textSize)
 
-        binding.EnterTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, title)
-        binding.DateCreated.setTextSize(TypedValue.COMPLEX_UNIT_SP, date)
-        binding.Reminder.setTextSize(TypedValue.COMPLEX_UNIT_SP, date)
-        binding.EnterBody.setTextSize(TypedValue.COMPLEX_UNIT_SP, body)
+        binding.EnterTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, TextSize.getEditTitleSize(model.textSize))
+        binding.DateCreated.setTextSize(TypedValue.COMPLEX_UNIT_SP, bodySize)
+        binding.Reminder.setTextSize(TypedValue.COMPLEX_UNIT_SP, bodySize)
+        binding.EnterBody.setTextSize(TypedValue.COMPLEX_UNIT_SP, TextSize.getEditBodySize(model.textSize))
 
         model.labels.observe(this, Observer { labels ->
-            Operations.bindLabels(binding.LabelGroup, labels, model.textSize)
+            Operations.bindLabels(binding.LabelGroup, labels, bodySize)
         })
 
         setupColor()
         setupImages()
         setupAudios()
         setupReminder()
+        setupToolbar()
 
         binding.root.isSaveFromParentEnabled = false
     }
 
-    private fun bindPinned(item: MenuItem) {
+
+    private fun bindPinned(item: MenuItem, pinned: Boolean) {
         val icon: Int
         val title: Int
-        if (model.pinned) {
+        if (pinned) {
             icon = R.drawable.unpin
             title = R.string.unpin
         } else {
