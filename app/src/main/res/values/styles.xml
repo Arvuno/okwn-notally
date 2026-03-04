@@ -31,6 +31,8 @@
         <item name="alternateFabBackground">@color/Blue50</item>
     </style>
 
+    <style name="Widget" parent="AppTheme" />
+
     <style name="MainActivity" parent="AppTheme">
         <item name="android:statusBarColor">@color/Transparent</item>
     </style>
