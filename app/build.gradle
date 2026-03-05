@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
@@ -22,7 +20,6 @@ android {
     }
 
     ksp {
-        arg("room.generateKotlin", "true")
         arg("room.schemaLocation", "$projectDir/schemas")
     }
 
@@ -38,7 +35,11 @@ android {
         }
     }
 
-    kotlinOptions { jvmTarget = "1.8" }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
 
     buildFeatures {
         viewBinding true
@@ -54,13 +55,9 @@ android {
     }
 }
 
-tasks.withType(KotlinCompile).configureEach {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
 dependencies {
     final def navVersion = "2.3.5"
-    final def roomVersion = "2.6.1"
+    final def roomVersion = "2.7.0"
 
     ksp "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
