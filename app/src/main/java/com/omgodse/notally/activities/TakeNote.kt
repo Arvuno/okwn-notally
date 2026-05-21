@@ -94,22 +94,17 @@ class TakeNote : NotallyActivity(Type.NOTE) {
             MaterialAlertDialogBuilder(this)
                 .setItems(items) { dialog, which ->
                     if (which == 1) {
-                        val spanStart = binding.EnterBody.text?.getSpanStart(span)
-                        val spanEnd = binding.EnterBody.text?.getSpanEnd(span)
-
-                        ifBothNotNullAndInvalid(spanStart, spanEnd) { start, end ->
-                            val text = binding.EnterBody.text?.substring(start, end)
-                            if (text != null) {
-                                val link = getURLFrom(text)
-                                val uri = Uri.parse(link)
-
-                                val intent = Intent(Intent.ACTION_VIEW, uri)
-                                try {
-                                    startActivity(intent)
-                                } catch (exception: Exception) {
-                                    Toast.makeText(this, R.string.cant_open_link, Toast.LENGTH_LONG).show()
-                                }
+                        val spanUrl = span.URL
+                        if (spanUrl != null) {
+                            val uri = Uri.parse(spanUrl)
+                            val intent = Intent(Intent.ACTION_VIEW, uri)
+                            try {
+                                startActivity(intent)
+                            } catch (exception: Exception) {
+                                Toast.makeText(this, R.string.cant_open_link, Toast.LENGTH_LONG).show()
                             }
+                        } else {
+                            Toast.makeText(this, R.string.cant_open_link, Toast.LENGTH_LONG).show()
                         }
                     }
                 }.show()
