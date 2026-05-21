@@ -91,6 +91,7 @@ class TakeNote : NotallyActivity(Type.NOTE) {
     private fun setupMovementMethod() {
         val items = arrayOf(getString(R.string.edit), getString(R.string.open_link))
         val movementMethod = LinkMovementMethod { span ->
+            if (span == null) return@LinkMovementMethod
             MaterialAlertDialogBuilder(this)
                 .setItems(items) { dialog, which ->
                     if (which == 1) {
