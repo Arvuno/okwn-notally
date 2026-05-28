@@ -35,3 +35,10 @@ All translations are crowd sourced. To contribute, follow these [guidelines](htt
 
 ## Contributing
 PRs welcome!
+## Installation
+
+1. Download the APK from the Releases page
+2. Install on your Android device
+3. Grant necessary permissions when prompted
+
+Or search for "Notally" on the Google Play Store.
