@@ -32,3 +32,8 @@ All translations are crowd sourced. To contribute, follow these [guidelines](htt
 * [The 9 Best Simple Note-Taking Apps for Android](https://www.makeuseof.com/simple-note-apps-android/)
 * [This tiny notes app made me write more because it opens instantly](https://www.makeuseof.com/notally-app-made-me-write-more/)
 * [I tried a minimalist notes app with zero buttons and I’m obsessed](https://www.makeuseof.com/minimalist-notes-app-with-zero-buttons/)
+## Contributing
+
+We welcome contributions! Please feel free to submit a Pull Request or open an issue for bug reports and feature suggestions.
+
+- Improved documentation clarity
